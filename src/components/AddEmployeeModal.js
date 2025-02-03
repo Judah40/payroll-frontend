@@ -1,6 +1,5 @@
-
-import React, { useState } from 'react';
-import { UserPlus, X } from 'lucide-react';
+import React, { useState } from "react";
+import { UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,55 +15,85 @@ import {
 const AddEmployeeModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    // Step 1
-    employeeType: '',
-    employeeName: '',
-    paymentMethod: '',
-    paymentId: '',
-    // Step 2
-    salaryAmount: '',
-    tax: '',
-    bankAccountNumber: '',
+
+  // Separate states for each field
+  const [employeeType, setEmployeeType] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentId, setPaymentId] = useState("");
+  const [salaryAmount, setSalaryAmount] = useState("");
+  const [tax, setTax] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+
+  // Separate handlers for each input field
+  const handleEmployeeNameChange = React.useCallback((e) => {
+    setEmployeeName(e.target.value);
+    console.log(e.target.value);
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
+  const handlePaymentIdChange = (e) => {
+    setPaymentId(e.target.value);
+  };
+
+  const handleSalaryAmountChange = (e) => {
+    setSalaryAmount(e.target.value);
+  };
+
+  const handleTaxChange = (e) => {
+    setTax(e.target.value);
+  };
+
+  const handleBankAccountNumberChange = (e) => {
+    setBankAccountNumber(e.target.value);
   };
 
   const handleRadioChange = (value) => {
-    setFormData(prev => ({
-      ...prev,
-      employeeType: value
-    }));
+    setEmployeeType(value);
   };
 
   const handleNext = () => {
-    setCurrentStep(prev => prev + 1);
+    setCurrentStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
-    setCurrentStep(prev => prev - 1);
+    setCurrentStep((prev) => prev - 1);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    const formData = {
+      employeeType,
+      employeeName,
+      paymentMethod,
+      paymentId,
+      salaryAmount,
+      tax,
+      bankAccountNumber,
+    };
+    console.log("Form submitted:", formData);
+
+    // Reset all states
     setIsOpen(false);
     setCurrentStep(1);
-    // Reset form data here if needed
+    setEmployeeType("");
+    setEmployeeName("");
+    setPaymentMethod("");
+    setPaymentId("");
+    setSalaryAmount("");
+    setTax("");
+    setBankAccountNumber("");
   };
 
-  const Form1 = () => (
+  const Form1 = React.memo(() => (
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Employee Type</Label>
         <RadioGroup
-          value={formData.employeeType}
+          value={employeeType}
           onValueChange={handleRadioChange}
           className="flex flex-col space-y-1"
         >
@@ -88,8 +117,8 @@ const AddEmployeeModal = () => {
         <Input
           id="employeeName"
           name="employeeName"
-          value={formData.employeeName}
-          onChange={handleInputChange}
+          value={employeeName}
+          onChange={handleEmployeeNameChange}
           placeholder="Enter employee name"
         />
       </div>
@@ -99,8 +128,8 @@ const AddEmployeeModal = () => {
         <Input
           id="paymentMethod"
           name="paymentMethod"
-          value={formData.paymentMethod}
-          onChange={handleInputChange}
+          value={paymentMethod}
+          onChange={handlePaymentMethodChange}
           placeholder="Enter payment method"
         />
       </div>
@@ -110,15 +139,15 @@ const AddEmployeeModal = () => {
         <Input
           id="paymentId"
           name="paymentId"
-          value={formData.paymentId}
-          onChange={handleInputChange}
+          value={paymentId}
+          onChange={handlePaymentIdChange}
           placeholder="Enter payment ID"
         />
       </div>
     </div>
-  );
+  ));
 
-  const Form2 = () => (
+  const Form2 = React.memo(() => (
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="salaryAmount">Salary Amount</Label>
@@ -126,8 +155,8 @@ const AddEmployeeModal = () => {
           id="salaryAmount"
           name="salaryAmount"
           type="number"
-          value={formData.salaryAmount}
-          onChange={handleInputChange}
+          value={salaryAmount}
+          onChange={handleSalaryAmountChange}
           placeholder="Enter salary amount"
         />
       </div>
@@ -138,8 +167,8 @@ const AddEmployeeModal = () => {
           id="tax"
           name="tax"
           type="number"
-          value={formData.tax}
-          onChange={handleInputChange}
+          value={tax}
+          onChange={handleTaxChange}
           placeholder="Enter tax amount"
         />
       </div>
@@ -149,13 +178,13 @@ const AddEmployeeModal = () => {
         <Input
           id="bankAccountNumber"
           name="bankAccountNumber"
-          value={formData.bankAccountNumber}
-          onChange={handleInputChange}
+          value={bankAccountNumber}
+          onChange={handleBankAccountNumberChange}
           placeholder="Enter bank account number"
         />
       </div>
     </div>
-  );
+  ));
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -173,15 +202,14 @@ const AddEmployeeModal = () => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {currentStep === 1 ? <Form1 /> : <Form2 />}
+          <div>
+            {currentStep === 1 && <Form1 />}
+            {currentStep === 2 && <Form2 />}
+          </div>
 
           <div className="flex justify-end gap-2 pt-4">
             {currentStep > 1 && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleBack}
-              >
+              <Button type="button" variant="outline" onClick={handleBack}>
                 Back
               </Button>
             )}
@@ -189,14 +217,14 @@ const AddEmployeeModal = () => {
               <Button
                 type="button"
                 onClick={handleNext}
-                disabled={!formData.employeeType || !formData.employeeName}
+                disabled={!employeeType || !employeeName}
               >
                 Next
               </Button>
             ) : (
-              <Button 
+              <Button
                 type="submit"
-                disabled={!formData.salaryAmount || !formData.bankAccountNumber}
+                disabled={!salaryAmount || !bankAccountNumber}
               >
                 Submit
               </Button>

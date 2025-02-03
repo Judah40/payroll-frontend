@@ -1,34 +1,34 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Users,
+  Home,
   Calendar,
   DollarSign,
-  FileText,
-  Settings,
+  Clock,
+  Bell,
+  User,
+  HelpCircle,
   ChevronLeft,
   Menu,
-  Clock,
-  PieChart,
-  FileSearch,
-  Building,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Sidebar = () => {
+const EmployeeSidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const navItems = [
-    { icon: PieChart, label: "Dashboard", href: "/Dashboard/Home" },
-    { icon: Users, label: "Employees", href: "/Dashboard/Employee" },
-    { icon: DollarSign, label: "Payroll", href: "/Dashboard/Payroll" },
-    { icon: Clock, label: "Time & Attendance", href: "/Dashboard/Attendance" },
-    { icon: Calendar, label: "Leave Management", href: "/Dashboard/Leave" },
-    { icon: FileText, label: "Tax Forms", href: "/Dashboard/Taxforms" },
-    { icon: FileSearch, label: "Reports", href: "/Dashboard/Reports" },
-    { icon: Building, label: "Departments", href: "/Dashboard/Department" },
-    { icon: Settings, label: "Settings", href: "/Dashboard/Settings" },
+    { icon: Home, label: "Dashboard", href: "/EmployeeDashboard/Home" },
+    { icon: Calendar, label: "My Leaves", href: "/EmployeeDashboard/MyLeave" },
+    { icon: Clock, label: "Attendance", href: "/EmployeeDashboard/Attendance" },
+    { icon: DollarSign, label: "Payroll", href: "/EmployeeDashboard/Payroll" },
+    {
+      icon: Bell,
+      label: "Announcements",
+      href: "/EmployeeDashboard/Announcements",
+    },
+    { icon: User, label: "Profile", href: "/EmployeeDashboard/Profile" },
+    { icon: HelpCircle, label: "Support", href: "/EmployeeDashboard/Support" },
   ];
 
   return (
@@ -65,7 +65,7 @@ const Sidebar = () => {
               isExpanded ? "text-xl" : "w-0"
             )}
           >
-            PayrollPro
+            Employee Panel
           </h1>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
@@ -121,7 +121,7 @@ const Sidebar = () => {
               isExpanded ? "opacity-100" : "opacity-0"
             )}
           >
-            © 2024 PayrollPro
+            © 2024 Employee Panel
           </p>
         </div>
       </aside>
@@ -129,4 +129,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default EmployeeSidebar;
